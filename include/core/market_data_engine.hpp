@@ -15,6 +15,7 @@ class MarketDataEngine {
 public:
     void update(const MarketEvent& ev);
     std::vector<std::pair<std::string, SymbolMetrics>> snapshot_all() const;
+    SymbolMetrics get_metrics(const std::string& symbol) const;
 
 private:
     struct Sample {

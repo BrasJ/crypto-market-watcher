@@ -92,4 +92,13 @@ std::vector<std::pair<std::string, SymbolMetrics>> MarketDataEngine::snapshot_al
     return result;
 }
 
+SymbolMetrics MarketDataEngine::get_metrics(const std::string& symbol) const {
+    std::shared_lock<std::shared_mutex> lock(mutex_);
+    auto it = symbols_.find(symbol);
+    if (it == symbols_.end()) {
+        return SymbolMetrics{};
+    }
+    return it->second.metrics;
+}
+
 } // namespace cmw
