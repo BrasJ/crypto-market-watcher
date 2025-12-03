@@ -10,7 +10,10 @@ Application::Application()
     : config_(load_default_config()),
       dashboard_(market_engine_, alert_engine_) {
     websocket_client_ = std::make_unique<DummyWebSocketClient>(event_queue_);
-    alert_engine_.add_rule(std::make_unique<DummyAlertRule>());
+    alert_engine_.add_rule(std::make_unique<PriceThresholdRule>(
+        "BTCUSDT", 100.5, ThresholdDirection::AtOrAbove));
+    alert_engine_.add_rule(std::make_unique<PercentChangeRule>(
+        "BTCUSDT", 5.0, true));
 }
 
 int Application::run() {
@@ -36,6 +39,9 @@ void Application::start_processing_thread() {
         while (running_) {
             auto ev = event_queue_.wait_and_pop();
             market_engine_.update(ev);
+
+            auto metrics = market_engine_.get_metrics(ev.symbol);
+            alert_engine_.evaluate(ev.symbol, metrics);
         }
     });
 }
