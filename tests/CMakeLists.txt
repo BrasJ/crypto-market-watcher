@@ -1,7 +1,7 @@
 add_executable(test_core
-    test_market_data_engine.cpp
-    test_alert_engine.cpp
-    test_event_queue.cpp
+    test_market_data.cpp
+    test_alert.cpp
+    test_queue.cpp
 )
 
 target_link_libraries(test_core

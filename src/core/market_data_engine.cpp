@@ -1,4 +1,5 @@
 #include "core/market_data_engine.hpp"
+#include <mutex>
 
 namespace cmw {
 
