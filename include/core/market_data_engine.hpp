@@ -1,5 +1,9 @@
 #pragma once
+
+#include "core/ring_buffer.hpp"
 #include "core/types.hpp"
+
+#include <chrono>
 #include <shared_mutex>
 #include <string>
 #include <unordered_map>
@@ -13,11 +17,28 @@ public:
     std::vector<std::pair<std::string, SymbolMetrics>> snapshot_all() const;
 
 private:
+    struct Sample {
+        double price {0.0};
+        std::chrono::system_clock::time_point ts{};
+    };
     struct SymbolState {
+        SymbolState();
+
+        void update(const MarketEvent& ev);
+        
         SymbolMetrics metrics;
-        void update(const MarketEvent& ev) {
-            metrics.last_price = ev.price;
-        }
+
+    private:
+        static constexpr std::size_t SHORT_CAPACITY = 60; // about 1m worth
+        static constexpr std::size_t LONG_CAPACITY = 300; // about 5m worth
+
+        RingBuffer<Sample> short_window_;
+        RingBuffer<Sample> long_window_;
+
+        void compute_metrics();
+        static double compute_average(const RingBuffer<Sample>& window);
+        static double compute_pct_change(const RingBuffer<Sample>& window);
+        static double compute_volatility(const RingBuffer<Sample>& window);
     };
 
     mutable std::shared_mutex mutex_;

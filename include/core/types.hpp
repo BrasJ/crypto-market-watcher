@@ -12,6 +12,11 @@ struct MarketEvent {
 
 struct SymbolMetrics {
     double last_price{0.0};
+    double ma_short{0.0};
+    double ma_long{0.0};
+    double pct_change_1m{0.0};
+    double pct_change_5m{0.0};
+    double volatility_1m {0.0};
 };
 
 struct Alert {
