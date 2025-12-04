@@ -25,8 +25,8 @@ enum class ThresholdDirection {
 class PriceThresholdRule : public AlertRule {
 public:
     PriceThresholdRule(std::string symbol,
-                        double threshold,
-                        ThresholdDirection direction);
+                       double threshold,
+                       ThresholdDirection direction);
 
     bool evaluate(const SymbolMetrics& metrics, Alert& out_alert) override;
     std::string id() const override { return "price_threshold"; }
@@ -41,8 +41,8 @@ private:
 class PercentChangeRule : public AlertRule {
 public:
     PercentChangeRule(std::string symbol,
-                        double min_change_1m,
-                        bool use_absolute = true);
+                      double min_change_1m,
+                      bool use_absolute = true);
 
     bool evaluate(const SymbolMetrics& metrics, Alert& out_alert) override;
     std::string id() const override { return "percent_change_1m"; }
@@ -57,7 +57,9 @@ private:
 class AlertEngine {
 public:
     void add_rule(std::unique_ptr<AlertRule> rule);
+
     void evaluate(const std::string& symbol, const SymbolMetrics& metrics);
+
     std::vector<Alert> get_recent_alerts() const;
 
 private:
