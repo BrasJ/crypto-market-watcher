@@ -8,8 +8,8 @@ namespace cmw {
 // ---- PriceThresholdRule ----
 
 PriceThresholdRule::PriceThresholdRule(std::string symbol,
-                                        double threshold,
-                                        ThresholdDirection direction)
+                                       double threshold,
+                                       ThresholdDirection direction)
     : symbol_(std::move(symbol)),
       threshold_(threshold),
       direction_(direction) {}
@@ -23,7 +23,7 @@ bool PriceThresholdRule::evaluate(const SymbolMetrics& metrics, Alert& out_alert
     } else {
         triggered = price <= threshold_;
     }
-    
+
     if (!triggered) {
         return false;
     }
@@ -36,16 +36,16 @@ bool PriceThresholdRule::evaluate(const SymbolMetrics& metrics, Alert& out_alert
 
 std::string PriceThresholdRule::description() const {
     std::string dir = (direction_ == ThresholdDirection::AtOrAbove)
-                        ? ">="
-                        : "<=";
-    return "Price " + dir + std:: to_string(threshold_);
+                          ? ">= "
+                          : "<= ";
+    return "Price " + dir + std::to_string(threshold_);
 }
 
 // ---- PercentChangeRule ----
 
 PercentChangeRule::PercentChangeRule(std::string symbol,
-                                        double min_change_1m,
-                                        bool use_absolute)
+                                     double min_change_1m,
+                                     bool use_absolute)
     : symbol_(std::move(symbol)),
       min_change_1m_(min_change_1m),
       use_absolute_(use_absolute) {}
